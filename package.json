@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.7.5",
+    "ws": "^8.16.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "slither.io",
+  "version": "1.0.0",
+  "main": "game.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

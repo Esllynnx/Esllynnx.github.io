@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #1f1f1f;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#users {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#messages {
+  list-style-type: none;
+  padding: 0;
+}
+
+#messages li {
+  margin-bottom: 10px;
+}
+
+input[type="text"], button {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #8a2be2;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #6a1b9a;
+}
+
+input[type="text"] {
+  width: calc(100% - 80px);
+}
+
+#username, #message {
+  width: calc(100% - 110px);
+}
+
+#username {
+  margin-right: 10px;
+}
+
+  </style>
+</head>
+<body>
+  <input type="text" id="username" placeholder="Digite seu nome">
+  <button onclick="joinChat()">Entrar no Chat</button>
+  <div id="users"></div>
+  <ul id="messages"></ul>
+  <input type="text" id="message" placeholder="Digite sua mensagem">
+  <button onclick="sendMessage()">Enviar</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function joinChat() {
+      const username = document.getElementById('username').value;
+      socket.emit('addUser', username);
+    }
+
+    socket.on('userJoined', message => {
+      const messages = document.getElementById('messages');
+      const item = document.createElement('li');
+      item.textContent = message;
+      messages.appendChild(item);
+    });
+
+    socket.on('userLeft', message => {
+      const messages = document.getElementById('messages');
+      const item = document.createElement('li');
+      item.textContent = message;
+      messages.appendChild(item);
+    });
+
+    socket.on('updateUsersList', users => {
+      const usersList = document.getElementById('users');
+      usersList.innerHTML = '';
+      users.forEach(user => {
+        const item = document.createElement('div');
+        item.textContent = user;
+        usersList.appendChild(item);
+      });
+    });
+
+    function sendMessage() {
+      const message = document.getElementById('message').value;
+      socket.emit('sendMessage', message);
+    }
+
+    socket.on('receiveMessage', data => {
+      const messages = document.getElementById('messages');
+      const item = document.createElement('li');
+      item.textContent = `${data.user}: ${data.message}`;
+      messages.appendChild(item);
+    });
+  </script>
+</body>
+</html>
