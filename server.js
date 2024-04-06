@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Rota inicial para servir a página HTML do chat
+// Rota inicial para servir a página HTML do cha
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
